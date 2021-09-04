@@ -17,9 +17,9 @@ class FinanceTest {
 	void test() {
 
 		var entryPerc = 0.20;
-		var months = 12;
-		var income = 5000.0;
-		var totalAmount = 10000.0;
+		var months = 80;
+		var income = 2000.0;
+		var totalAmount = 100000.0;
 
 		var entry = totalAmount * entryPerc;
 		var quota = (totalAmount - entry) / months;
@@ -29,42 +29,61 @@ class FinanceTest {
 		assertTrue(quota <= quotalimite);
 	}
 
-
+	
 	@Test
-	void financeConstructorShouldCalculateDownPaymentAndInstallmentsWhenSuccessful() {
+	void entryShouldReturnTwentyPercentOfTotalAmount() {
 		var totalAmount = 10000.0;
 		var income = 5000.0;
 		var months = 12;
 
+		var finance = FinanceFactory.createFinanceConstructor(months, income, totalAmount);
+		var expectedEntryValue = totalAmount * 0.20;
+
+		assertEquals(expectedEntryValue, finance.entry());
+	}
+	
+	@Test
+	void quotaShouldReturnCorrectQuotaValue() {
+		var totalAmount = 10000.0;
+		var income = 5000.0;
+		var months = 12;
+
+		var finance = FinanceFactory.createFinanceConstructor(months, income, totalAmount);
 		var entry = totalAmount * 0.20;
-		var quota = (totalAmount - entry)/months;
-		var quotalimite = income * 0.50;
+		var expectedQuota = (totalAmount - entry)/months;
+		
+		assertEquals(expectedQuota, finance.quota());
+	}
+
+
+	@Test
+	void constructorShouldSetValuesWhenValidData() {
+		var totalAmount = 10000.0;
+		var income = 5000.0;
+		var months = 12;
 
 		var finance = FinanceFactory.createFinanceConstructor(months, income, totalAmount);
 
-		assertEquals(entry, finance.entry());
-		assertEquals(quota, finance.quota());
-		assertTrue(finance.quota() <= quotalimite);
+		assertEquals(totalAmount, finance.getTotalAmount());
+		assertEquals(income, finance.getIncome());
+		assertEquals(months, finance.getMonths());
 	}
 
 	@Test
-	void financeShouldCalculateDownPaymentAndInstallmentsWhenSuccessful() {
+	void financeShouldSetValuesWhenValidData() {
 		var totalAmount = 10000.0;
 		var income = 5000.0;
 		var months = 12;
 
-		var entry = totalAmount * 0.20;
-		var quota = (totalAmount - entry)/months;
-		var quotalimite = income * 0.50;
 
 		var finance = new Finance();
 		finance.setTotalAmount(totalAmount);
 		finance.setIncome(income);
 		finance.setMonths(months);
 
-		assertEquals(entry, finance.entry());
-		assertEquals(quota, finance.quota());
-		assertTrue(finance.quota() <= quotalimite);
+		assertEquals(totalAmount, finance.getTotalAmount());
+		assertEquals(income, finance.getIncome());
+		assertEquals(months, finance.getMonths());
 	}
 
 
@@ -86,7 +105,7 @@ class FinanceTest {
 	}
 	
 	@Test
-	void financeConstructorShouldThrowsExceptionWhenQuotaIsGreaterThanHalfOfIncome() {
+	void constructorShouldThrowsExceptionWhenQuotaIsGreaterThanHalfOfIncome() {
 		var totalAmount = 50000.0;
 		var income = 5000.0;
 		var months = 12;
@@ -100,7 +119,7 @@ class FinanceTest {
 	}
 	
 	@Test
-	void financeConstructorShouldThrowsExceptionWhenMonthsIsEmpty() {
+	void constructorShouldThrowsExceptionWhenMonthsIsEmpty() {
 		var totalAmount = 50000.0;
 		var income = 5000.0;
 		var months = 0;
@@ -133,7 +152,7 @@ class FinanceTest {
 	
 	
 	@Test
-	void financeConstructorShouldThrowsExceptionWhenIncomeIsEmpty() {
+	void constructorShouldThrowsExceptionWhenIncomeIsEmpty() {
 		var totalAmount = 50000.0;
 		var income = 0.0;
 		var months = 12;
@@ -165,7 +184,7 @@ class FinanceTest {
 	}
 	
 	@Test
-	void financeConstructorShouldThrowsExceptionWhenTotalAmountIsEmpty() {
+	void constructorShouldThrowsExceptionWhenTotalAmountIsEmpty() {
 		var totalAmount = 0.0;
 		var income = 5000.0;
 		var months = 12;
